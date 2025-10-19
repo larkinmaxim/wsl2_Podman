@@ -84,10 +84,7 @@ This repository contains three PowerShell scripts that provide a complete contai
    ```
 
 ### Step 2: Run WSL Installation
-1. **Close terminal and run Terminal as Administrator**
-   ```powershell
-   # Right-click Start → Windows Terminal (Admin)
-   ```
+1. **Open PowerShell as Administrator** (see [Running PowerShell as Administrator](#-running-powershell-as-administrator) section below)
 
 2. **Navigate to scripts folder**
    ```powershell
@@ -103,7 +100,7 @@ This repository contains three PowerShell scripts that provide a complete contai
 **Restart your computer when prompted**
 
 ### Step 4: Complete Installation
-1. **Run Terminal as Administrator again**
+1. **Open PowerShell as Administrator again** (see [Running PowerShell as Administrator](#-running-powershell-as-administrator) section)
    ```powershell
    cd C:\WSL-Scripts
    ```
@@ -119,6 +116,44 @@ This repository contains three PowerShell scripts that provide a complete contai
    ```
 
 **✅ Done! Your WSL2 and Podman environment is ready.**
+
+## 🔐 Running PowerShell as Administrator
+
+**IMPORTANT**: All installation scripts require Administrator privileges. Here's how to open PowerShell as Administrator:
+
+### Method 1: Right-Click Start Menu (Recommended)
+1. **Right-click the Windows Start button** (or press `Windows + X`)
+2. **Click "Windows Terminal (Admin)"** or **"PowerShell (Admin)"**
+3. **Click "Yes"** when prompted by User Account Control (UAC)
+
+### Method 2: Search Menu
+1. **Press Windows key** and type `powershell`
+2. **Right-click** on "Windows PowerShell" in search results
+3. **Select "Run as Administrator"** (see image below)
+4. **Click "Yes"** when prompted by UAC
+
+![PowerShell Run as Administrator](images/powershell-admin-menu.png)
+*Example: Right-click PowerShell and select "Run as Administrator"*
+
+### Method 3: From File Explorer
+1. **Navigate to your scripts folder** (e.g., `C:\WSL-Scripts`)
+2. **Hold Shift and right-click** in empty space
+3. **Select "Open PowerShell window here as administrator"**
+
+### ✅ How to Verify Administrator Mode
+When running as Administrator, you'll see:
+- **Window title** shows "Administrator: Windows PowerShell" or similar
+- **UAC prompt** appeared when opening PowerShell
+- **No permission errors** when running scripts
+
+### ❌ Common Administrator Errors
+If you see these errors, you need to run as Administrator:
+```
+The script cannot be run because it contains a "#requires" statement for running as Administrator
+```
+```
+ERROR: This script must be run as Administrator!
+```
 
 ## 📖 Detailed Usage Instructions
 
@@ -209,6 +244,19 @@ Set-ExecutionPolicy -ExecutionPolicy Restricted -Scope CurrentUser
 - You ran the script by mistake
 
 ### Common Issues
+
+#### Administrator Permission Errors
+
+**Problem**: Script fails with Administrator requirement messages
+**Examples**:
+```
+The script cannot be run because it contains a "#requires" statement for running as Administrator
+```
+```
+ERROR: This script must be run as Administrator!
+```
+
+**Solution**: See the complete [Running PowerShell as Administrator](#-running-powershell-as-administrator) section above for detailed instructions with visual guides.
 
 #### "git is not recognized" Error
 
