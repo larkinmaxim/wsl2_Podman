@@ -3,13 +3,22 @@
 
 #Requires -RunAsAdministrator
 
+# Function to pause before exit to prevent window from closing
+function Pause-BeforeExit {
+    param([int]$ExitCode = 0)
+    Write-Host ""
+    Write-Host "Press any key to continue..." -ForegroundColor Gray
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    exit $ExitCode
+}
+
 Write-Host "=== Podman Installation Script ===" -ForegroundColor Cyan
 Write-Host ""
 
 # Check if WSL is installed and running
 Write-Host "Checking WSL installation..." -ForegroundColor Yellow
 try {
-    $wslCheck = wsl --status 2>$null
+    wsl --status 2>$null | Out-Null
     if ($LASTEXITCODE -ne 0) {
         throw "WSL not properly configured"
     }
@@ -17,7 +26,7 @@ try {
 } catch {
     Write-Host "ERROR: WSL is not installed or not properly configured." -ForegroundColor Red
     Write-Host "Please run the WSL installation scripts first." -ForegroundColor Yellow
-    exit 1
+    Pause-BeforeExit 1
 }
 Write-Host ""
 
@@ -60,7 +69,7 @@ try {
 } catch {
     Write-Host "ERROR: Failed to download Podman Desktop" -ForegroundColor Red
     Write-Host $_.Exception.Message -ForegroundColor Red
-    exit 1
+    Pause-BeforeExit 1
 }
 Write-Host ""
 
@@ -82,7 +91,7 @@ try {
     Write-Host "ERROR: Failed to install Podman Desktop" -ForegroundColor Red
     Write-Host $_.Exception.Message -ForegroundColor Red
     Write-Host "Check log at: $env:TEMP\podman-install.log" -ForegroundColor Yellow
-    exit 1
+    Pause-BeforeExit 1
 }
 Write-Host ""
 
@@ -128,7 +137,7 @@ if (-not $podmanFound) {
     Write-Host "Then manually run the rest of the setup:" -ForegroundColor Yellow
     Write-Host "  podman machine init" -ForegroundColor White
     Write-Host "  podman machine start" -ForegroundColor White
-    exit 1
+    Pause-BeforeExit 1
 }
 Write-Host ""
 
@@ -160,7 +169,7 @@ try {
     Write-Host ""
     Write-Host "Try manually:" -ForegroundColor Yellow
     Write-Host "  podman machine init" -ForegroundColor White
-    exit 1
+    Pause-BeforeExit 1
 }
 Write-Host ""
 
@@ -190,7 +199,7 @@ try {
     Write-Host ""
     Write-Host "Try manually:" -ForegroundColor Yellow
     Write-Host "  podman machine start" -ForegroundColor White
-    exit 1
+    Pause-BeforeExit 1
 }
 Write-Host ""
 
@@ -250,3 +259,4 @@ if ($LASTEXITCODE -eq 0) {
 
 Write-Host ""
 Write-Host "Installation log saved to: $env:TEMP\podman-install.log" -ForegroundColor Gray
+Pause-BeforeExit 0

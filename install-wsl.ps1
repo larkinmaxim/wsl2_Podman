@@ -3,6 +3,15 @@
 
 #Requires -RunAsAdministrator
 
+# Function to pause before exit to prevent window from closing
+function Pause-BeforeExit {
+    param([int]$ExitCode = 0)
+    Write-Host ""
+    Write-Host "Press any key to continue..." -ForegroundColor Gray
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    exit $ExitCode
+}
+
 Write-Host "=== WSL Installation Script ===" -ForegroundColor Cyan
 Write-Host ""
 
@@ -19,7 +28,7 @@ try {
         $continue = Read-Host "WSL is already installed. Do you want to continue anyway? (Y/N)"
         if ($continue -ne 'Y' -and $continue -ne 'y') {
             Write-Host "Installation cancelled by user." -ForegroundColor Yellow
-            exit 0
+            Pause-BeforeExit 0
         }
         Write-Host "Continuing with installation..." -ForegroundColor Yellow
         Write-Host ""
@@ -38,7 +47,7 @@ Write-Host "Total RAM: $totalRAMGB GB" -ForegroundColor Green
 
 if ($totalRAMGB -lt 6) {
     Write-Host "ERROR: Insufficient RAM. At least 6 GB required. Found: $totalRAMGB GB" -ForegroundColor Red
-    exit 1
+    Pause-BeforeExit 1
 }
 
 Write-Host "RAM check passed!" -ForegroundColor Green
@@ -50,7 +59,7 @@ dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux 
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: Failed to enable WSL feature" -ForegroundColor Red
-    exit 1
+    Pause-BeforeExit 1
 }
 
 Write-Host "WSL feature enabled successfully!" -ForegroundColor Green
@@ -62,7 +71,7 @@ dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /nores
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: Failed to enable Virtual Machine Platform" -ForegroundColor Red
-    exit 1
+    Pause-BeforeExit 1
 }
 
 Write-Host "Virtual Machine Platform enabled successfully!" -ForegroundColor Green
@@ -84,4 +93,5 @@ if ($restart -eq 'Y' -or $restart -eq 'y') {
     Restart-Computer -Force
 } else {
     Write-Host "Please restart your computer manually to complete the installation." -ForegroundColor Yellow
+    Pause-BeforeExit 0
 }

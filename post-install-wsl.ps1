@@ -3,13 +3,22 @@
 
 #Requires -RunAsAdministrator
 
+# Function to pause before exit to prevent window from closing
+function Pause-BeforeExit {
+    param([int]$ExitCode = 0)
+    Write-Host ""
+    Write-Host "Press any key to continue..." -ForegroundColor Gray
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    exit $ExitCode
+}
+
 Write-Host "=== WSL Post-Installation Configuration ===" -ForegroundColor Cyan
 Write-Host ""
 
 # Check if WSL is installed
 Write-Host "Checking WSL installation..." -ForegroundColor Yellow
 try {
-    $wslVersion = wsl --version 2>$null
+    wsl --version 2>$null | Out-Null
     if ($LASTEXITCODE -ne 0) {
         throw "WSL not found"
     }
@@ -18,7 +27,7 @@ try {
 } catch {
     Write-Host "ERROR: WSL is not installed or not accessible." -ForegroundColor Red
     Write-Host "Please ensure you have restarted your computer after running the installation script." -ForegroundColor Yellow
-    exit 1
+    Pause-BeforeExit 1
 }
 
 # Display WSL version information
@@ -65,3 +74,4 @@ wsl --update
 Write-Host ""
 Write-Host "=== Configuration Complete ===" -ForegroundColor Green
 Write-Host ""
+Pause-BeforeExit 0
