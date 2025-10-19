@@ -71,50 +71,57 @@ This repository contains three PowerShell scripts that provide a complete contai
 ## 🚀 Quick Start Guide
 
 ### Step 1: Create Folder and Clone Repository
+
 1. **Create a folder for scripts**
+
    - Open **File Explorer** (Windows key + E)
    - Navigate to your desired location (e.g., C:\ drive or Desktop)
    - **Right-click** in empty space
    - Select **New** → **Folder**
    - Name the folder `WSL-Scripts`
    - **Double-click** the folder to open it
-
 2. **Open terminal in this folder and clone repository**
+
    - **Right-click** inside the `WSL-Scripts` folder
    - Select **"Open in Terminal"** or **"Open PowerShell window here"**
    - Run the git clone command:
+
    ```powershell
    git -c http.sslVerify=false clone https://github.com/larkinmaxim/wsl2_Podman.git .
    ```
 
 ### Step 2: Run WSL Installation
-1. **Open PowerShell as Administrator** (see [Running PowerShell as Administrator](#-running-powershell-as-administrator) section below)
 
+1. **Open PowerShell as Administrator** (see [Running PowerShell as Administrator](#-running-powershell-as-administrator) section below)
 2. **Navigate to scripts folder**
+
    ```powershell
    cd C:\WSL-Scripts
    ```
-
 3. **Run WSL installation script**
+
    ```powershell
    .\install-wsl.ps1
    ```
 
 ### Step 3: Restart Computer
+
 **Restart your computer when prompted**
 
 ### Step 4: Complete Installation
+
 1. **Open PowerShell as Administrator again** (see [Running PowerShell as Administrator](#-running-powershell-as-administrator) section)
+
    ```powershell
    cd C:\WSL-Scripts
    ```
-
 2. **Run post-installation script**
+
    ```powershell
    .\post-install-wsl.ps1
    ```
-
 3. **Run Podman installation script**
+
    ```powershell
    .\install-podman.ps1
    ```
@@ -126,6 +133,7 @@ This repository contains three PowerShell scripts that provide a complete contai
 **IMPORTANT**: All installation scripts require Administrator privileges. Here's how to open PowerShell as Administrator:
 
 ### Method 2: Search Menu
+
 1. **Press Windows key** and type `powershell`
 2. **Right-click** on "Windows PowerShell" in search results
 3. **Select "Run as Administrator"** (see image below)
@@ -133,21 +141,6 @@ This repository contains three PowerShell scripts that provide a complete contai
 
 ![PowerShell Run as Administrator][powershell-admin-menu]
 *Example: Right-click PowerShell and select "Run as Administrator"*
-
-### ✅ How to Verify Administrator Mode
-When running as Administrator, you'll see:
-- **Window title** shows "Administrator: Windows PowerShell" or similar
-- **UAC prompt** appeared when opening PowerShell
-- **No permission errors** when running scripts
-
-### ❌ Common Administrator Errors
-If you see these errors, you need to run as Administrator:
-```
-The script cannot be run because it contains a "#requires" statement for running as Administrator
-```
-```
-ERROR: This script must be run as Administrator!
-```
 
 ## 📖 Detailed Usage Instructions
 
@@ -243,9 +236,11 @@ Set-ExecutionPolicy -ExecutionPolicy Restricted -Scope CurrentUser
 
 **Problem**: Script fails with Administrator requirement messages
 **Examples**:
+
 ```
 The script cannot be run because it contains a "#requires" statement for running as Administrator
 ```
+
 ```
 ERROR: This script must be run as Administrator!
 ```
@@ -287,4 +282,4 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 - Keep Windows and WSL updated for best performance
 - Review script contents before execution for security
 
-[powershell-admin-menu]: images/powershell-admin-menu.png "PowerShell Run as Administrator"
+[powershell-admin-menu]: images/powershell-admin-menu.png
