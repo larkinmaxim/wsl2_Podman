@@ -19,7 +19,8 @@ This repository contains three PowerShell scripts that provide a complete contai
 - **Administrator privileges** (required for all scripts)
 - **CPU virtualization support** (Intel VT-x or AMD-V)
 - **Hyper-V compatible processor**
-- **Stable internet connection** (for Podman installation)
+- **Git** (for cloning repository - [Download here](https://git-scm.com/downloads))
+- **Stable internet connection** (for downloads and installation)
 
 ### Supported Windows Versions
 
@@ -69,44 +70,65 @@ This repository contains three PowerShell scripts that provide a complete contai
 
 ## 🚀 Quick Start Guide
 
-### Step 1: Pre-Installation
-
-1. Ensure you're running Windows 10 (2004+) or Windows 11
-2. Close all important applications - Restart computer will be required at the end of this step!
-3. Ensure stable internet connection
-
-### Step 2: Run Installation Script
+### Step 1: Clone Repository
 
 1. **Open PowerShell as Administrator**
 
    ```powershell
    # Right-click Start menu → Windows PowerShell (Admin)
    ```
-2. **Navigate to script directory**
+
+2. **Navigate to desired installation directory**
 
    ```powershell
-   cd "C:\path\to\your\scripts"
+   cd "C:\Users\$env:USERNAME\Desktop"  # Or any directory you prefer
    ```
-3. **Execute installation script**
+
+3. **Clone the repository**
+
+   ```powershell
+   git clone https://github.com/larkinmaxim/wsl2_Podman.git
+   cd wsl2_Podman
+   ```
+
+### Step 2: Pre-Installation
+
+1. Ensure you're running Windows 10 (2004+) or Windows 11
+2. Close all important applications - Restart computer will be required at the end of this step!
+3. Ensure stable internet connection
+
+### Step 3: Run Installation Script
+
+1. **In the same PowerShell (Administrator) session**
+
+2. **Execute installation script**
 
    ```powershell
    .\install-wsl.ps1
    ```
-4. **Follow prompts** and restart when requested
+
+3. **Follow prompts** and restart when requested
 
    - If WSL is already installed, the script will detect it and ask if you want to continue
    - You can choose to proceed anyway (useful for repairs/updates) or cancel safely
 
-### Step 3: Post-Installation Setup
+### Step 4: Post-Installation Setup
 
 1. **After restart, open PowerShell as Administrator again**
-2. **Run post-installation script**
+
+2. **Navigate back to the repository directory**
+
+   ```powershell
+   cd "C:\Users\$env:USERNAME\Desktop\wsl2_Podman"  # Adjust path as needed
+   ```
+
+3. **Run post-installation script**
 
    ```powershell
    .\post-install-wsl.ps1
    ```
 
-### Step 4: Podman Installation (Optional but Recommended)
+### Step 5: Podman Installation (Optional but Recommended)
 
 1. **Keep PowerShell as Administrator open**
 2. **Run Podman installation script**
@@ -211,6 +233,14 @@ Set-ExecutionPolicy -ExecutionPolicy Restricted -Scope CurrentUser
 - You ran the script by mistake
 
 ### Common Issues
+
+#### "git is not recognized" Error
+
+**Problem**: Git is not installed or not in PATH
+**Solutions**:
+1. **Install Git**: Download from [git-scm.com](https://git-scm.com/downloads)
+2. **Restart PowerShell** after Git installation
+3. **Alternative**: Download ZIP directly from [GitHub repository](https://github.com/larkinmaxim/wsl2_Podman/archive/refs/heads/master.zip) and extract
 
 #### "Script cannot be loaded" Error
 
