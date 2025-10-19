@@ -140,7 +140,7 @@ This repository contains three PowerShell scripts that provide a complete contai
 4. **Click "Yes"** when prompted by UAC
 
 ![PowerShell Run as Administrator][powershell-admin-menu]
-*Example: Right-click PowerShell and select "Run as Administrator"*
+
 
 ## 📖 Detailed Usage Instructions
 
