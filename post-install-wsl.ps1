@@ -3,12 +3,28 @@
 
 #Requires -RunAsAdministrator
 
+# Global error handler
+try {
+
+# Check if running as administrator first
+if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+    Write-Host "ERROR: This script must be run as Administrator!" -ForegroundColor Red
+    Write-Host "Please right-click and 'Run as Administrator'" -ForegroundColor Yellow
+    Read-Host "Press Enter to exit"
+    exit 1
+}
+
 # Function to pause before exit to prevent window from closing
 function Pause-BeforeExit {
     param([int]$ExitCode = 0)
     Write-Host ""
-    Write-Host "Press any key to continue..." -ForegroundColor Gray
-    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    try {
+        Write-Host "Press any key to continue..." -ForegroundColor Gray
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    } catch {
+        # Fallback for compatibility issues
+        Read-Host "Press Enter to continue"
+    }
     exit $ExitCode
 }
 
@@ -75,3 +91,14 @@ Write-Host ""
 Write-Host "=== Configuration Complete ===" -ForegroundColor Green
 Write-Host ""
 Pause-BeforeExit 0
+
+} catch {
+    Write-Host ""
+    Write-Host "CRITICAL ERROR:" -ForegroundColor Red
+    Write-Host "Error: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host ""
+    Write-Host "Please run the debug version for more details:" -ForegroundColor Yellow
+    Write-Host ".\post-install-wsl-debug.ps1" -ForegroundColor Cyan
+    Read-Host "Press Enter to exit"
+    exit 1
+}
