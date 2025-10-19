@@ -132,7 +132,7 @@ This repository contains three PowerShell scripts that provide a complete contai
 
 **IMPORTANT**: All installation scripts require Administrator privileges. Here's how to open PowerShell as Administrator:
 
-### Method 2: Search Menu (Recommended)
+### Search Menu (Recommended)
 
 1. **Press Windows key** and type `powershell`
 2. **Right-click** on "Windows PowerShell" in search results
@@ -140,7 +140,6 @@ This repository contains three PowerShell scripts that provide a complete contai
 4. **Click "Yes"** when prompted by UAC
 
 ![PowerShell Run as Administrator][powershell-admin-menu]
-
 
 ## 📖 Detailed Usage Instructions
 
