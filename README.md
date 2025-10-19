@@ -72,13 +72,17 @@ This repository contains three PowerShell scripts that provide a complete contai
 
 ### Step 1: Create Folder and Clone Repository
 1. **Create a folder for scripts**
-   ```powershell
-   # Create folder on Desktop (or anywhere you prefer)
-   mkdir C:\WSL-Scripts
-   cd C:\WSL-Scripts
-   ```
+   - Open **File Explorer** (Windows key + E)
+   - Navigate to your desired location (e.g., C:\ drive or Desktop)
+   - **Right-click** in empty space
+   - Select **New** → **Folder**
+   - Name the folder `WSL-Scripts`
+   - **Double-click** the folder to open it
 
 2. **Open terminal in this folder and clone repository**
+   - **Right-click** inside the `WSL-Scripts` folder
+   - Select **"Open in Terminal"** or **"Open PowerShell window here"**
+   - Run the git clone command:
    ```powershell
    git -c http.sslVerify=false clone https://github.com/larkinmaxim/wsl2_Podman.git .
    ```
@@ -121,24 +125,14 @@ This repository contains three PowerShell scripts that provide a complete contai
 
 **IMPORTANT**: All installation scripts require Administrator privileges. Here's how to open PowerShell as Administrator:
 
-### Method 1: Right-Click Start Menu (Recommended)
-1. **Right-click the Windows Start button** (or press `Windows + X`)
-2. **Click "Windows Terminal (Admin)"** or **"PowerShell (Admin)"**
-3. **Click "Yes"** when prompted by User Account Control (UAC)
-
 ### Method 2: Search Menu
 1. **Press Windows key** and type `powershell`
 2. **Right-click** on "Windows PowerShell" in search results
 3. **Select "Run as Administrator"** (see image below)
 4. **Click "Yes"** when prompted by UAC
 
-![PowerShell Run as Administrator](images/powershell-admin-menu.png)
+![PowerShell Run as Administrator][powershell-admin-menu]
 *Example: Right-click PowerShell and select "Run as Administrator"*
-
-### Method 3: From File Explorer
-1. **Navigate to your scripts folder** (e.g., `C:\WSL-Scripts`)
-2. **Hold Shift and right-click** in empty space
-3. **Select "Open PowerShell window here as administrator"**
 
 ### ✅ How to Verify Administrator Mode
 When running as Administrator, you'll see:
@@ -292,3 +286,5 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 - Ensure system restart after initial installation
 - Keep Windows and WSL updated for best performance
 - Review script contents before execution for security
+
+[powershell-admin-menu]: images/powershell-admin-menu.png "PowerShell Run as Administrator"
