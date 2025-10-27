@@ -18,7 +18,7 @@ Write-Host ""
 # Check if WSL is already installed
 Write-Host "Checking for existing WSL installation..." -ForegroundColor Yellow
 try {
-    wsl --version 2>$null | Out-Null
+    wsl --version 2>$null
     if ($LASTEXITCODE -eq 0) {
         Write-Host "WSL is already installed!" -ForegroundColor Green
         Write-Host "Current WSL version information:" -ForegroundColor Cyan

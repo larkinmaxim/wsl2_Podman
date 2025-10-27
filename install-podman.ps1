@@ -18,7 +18,7 @@ Write-Host ""
 # Check if WSL is installed and running
 Write-Host "Checking WSL installation..." -ForegroundColor Yellow
 try {
-    wsl --status 2>$null | Out-Null
+    wsl --status 2>$null
     if ($LASTEXITCODE -ne 0) {
         throw "WSL not properly configured"
     }
