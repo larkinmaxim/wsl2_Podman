@@ -55,7 +55,7 @@ Write-Host ""
 
 # Enable WSL feature
 Write-Host "Enabling Windows Subsystem for Linux..." -ForegroundColor Yellow
-dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart | Out-Null
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: Failed to enable WSL feature" -ForegroundColor Red
@@ -67,7 +67,7 @@ Write-Host ""
 
 # Enable Virtual Machine Platform
 Write-Host "Enabling Virtual Machine Platform..." -ForegroundColor Yellow
-dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart | Out-Null
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: Failed to enable Virtual Machine Platform" -ForegroundColor Red
