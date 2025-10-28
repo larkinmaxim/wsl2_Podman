@@ -122,7 +122,7 @@ foreach ($path in $searchPaths) {
     Write-Host "  Checking: $testPath" -ForegroundColor Gray
     
     if (Test-Path $testPath) {
-        Write-Host "  ✓ Found Podman at: $testPath" -ForegroundColor Green
+        Write-Host "  + Found Podman at: $testPath" -ForegroundColor Green
         $podmanDir = $path
         $podmanFound = $true
         break
@@ -140,7 +140,7 @@ if ($podmanFound) {
             # Add Podman directory to system PATH
             $newPath = "$currentPath;$podmanDir"
             [System.Environment]::SetEnvironmentVariable("PATH", $newPath, "Machine")
-            Write-Host "✓ Podman added to system PATH successfully!" -ForegroundColor Green
+            Write-Host "+ Podman added to system PATH successfully!" -ForegroundColor Green
             
             # Also add to current session PATH for immediate availability
             $env:PATH = "$podmanDir;$env:PATH"
@@ -150,23 +150,23 @@ if ($podmanFound) {
             try {
                 $podmanVersion = podman --version 2>$null
                 if ($LASTEXITCODE -eq 0) {
-                    Write-Host "✓ Podman CLI is now available: $podmanVersion" -ForegroundColor Green
+                    Write-Host "+ Podman CLI is now available: $podmanVersion" -ForegroundColor Green
                 } else {
-                    Write-Host "⚠ Podman added to PATH but may need PowerShell restart to be fully available" -ForegroundColor Yellow
+                    Write-Host "! Podman added to PATH but may need PowerShell restart to be fully available" -ForegroundColor Yellow
                 }
             } catch {
-                Write-Host "⚠ Podman added to PATH but may need PowerShell restart to be fully available" -ForegroundColor Yellow
+                Write-Host "! Podman added to PATH but may need PowerShell restart to be fully available" -ForegroundColor Yellow
             }
         } else {
-            Write-Host "✓ Podman is already in system PATH" -ForegroundColor Green
+            Write-Host "+ Podman is already in system PATH" -ForegroundColor Green
         }
     } catch {
-        Write-Host "⚠ Could not modify system PATH automatically" -ForegroundColor Yellow
+        Write-Host "! Could not modify system PATH automatically" -ForegroundColor Yellow
         Write-Host "  You may need to add this path manually: $podmanDir" -ForegroundColor Gray
         Write-Host "  Or run the next script which will handle it automatically" -ForegroundColor Gray
     }
 } else {
-    Write-Host "⚠ Could not locate Podman CLI after installation" -ForegroundColor Yellow
+    Write-Host "! Could not locate Podman CLI after installation" -ForegroundColor Yellow
     Write-Host "  This will be handled by the next script (4-post-install-podman.ps1)" -ForegroundColor Gray
 }
 

@@ -22,7 +22,7 @@ $podmanFound = $false
 try {
     $podmanVersion = podman --version 2>$null
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "✓ Podman CLI is available: $podmanVersion" -ForegroundColor Green
+        Write-Host "+ Podman CLI is available: $podmanVersion" -ForegroundColor Green
         $podmanFound = $true
     }
 } catch {
@@ -30,7 +30,7 @@ try {
 }
 
 if (-not $podmanFound) {
-    Write-Host "⚠ Podman CLI not found in PATH. Attempting to locate..." -ForegroundColor Yellow
+    Write-Host "! Podman CLI not found in PATH. Attempting to locate..." -ForegroundColor Yellow
     
     # Quick search in common locations
     $searchPaths = @(
@@ -46,13 +46,13 @@ if (-not $podmanFound) {
         if (Test-Path $testPath) {
             $podmanExePath = $testPath
             $env:PATH = "$path;$env:PATH"
-            Write-Host "✓ Found and added Podman to current session PATH" -ForegroundColor Green
+            Write-Host "+ Found and added Podman to current session PATH" -ForegroundColor Green
             break
         }
     }
     
     if (-not $podmanExePath) {
-        Write-Host "✗ Could not locate Podman CLI installation." -ForegroundColor Red
+        Write-Host "X Could not locate Podman CLI installation." -ForegroundColor Red
         Write-Host ""
         Write-Host "Please ensure Podman Desktop is properly installed or run:" -ForegroundColor Yellow
         Write-Host "  .\3-install-podman.ps1" -ForegroundColor White
@@ -150,7 +150,7 @@ podman run hello-world
 if ($LASTEXITCODE -eq 0) {
     Write-Host ""
     Write-Host "========================================" -ForegroundColor Green
-    Write-Host "   Installation Complete! ✓" -ForegroundColor Green
+    Write-Host "   Installation Complete! +" -ForegroundColor Green
     Write-Host "========================================" -ForegroundColor Green
     Write-Host ""
     Write-Host "Podman is now ready to use!" -ForegroundColor Green
