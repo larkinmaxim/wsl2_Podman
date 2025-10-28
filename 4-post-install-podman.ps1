@@ -15,25 +15,106 @@ function Pause-BeforeExit {
 Write-Host "=== Podman Post-Installation Configuration ===" -ForegroundColor Cyan
 Write-Host ""
 
-# Verify Podman CLI is available
-Write-Host "Verifying Podman CLI availability..." -ForegroundColor Yellow
+# Verify and configure Podman CLI
+Write-Host "Locating and configuring Podman CLI..." -ForegroundColor Yellow
+
+# First, try to see if podman is already in PATH
+$podmanFound = $false
 try {
     $podmanVersion = podman --version 2>$null
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "Podman CLI is available: $podmanVersion" -ForegroundColor Green
-    } else {
-        throw "Podman command not found"
+        Write-Host "✓ Podman CLI is already available: $podmanVersion" -ForegroundColor Green
+        $podmanFound = $true
     }
 } catch {
-    Write-Host "ERROR: Podman CLI is not available in this session." -ForegroundColor Red
-    Write-Host ""
-    Write-Host "Possible solutions:" -ForegroundColor Yellow
-    Write-Host "1. Restart your computer and try again" -ForegroundColor White
-    Write-Host "2. Check if Podman Desktop installed correctly" -ForegroundColor White
-    Write-Host "3. Manually add Podman to PATH:" -ForegroundColor White
-    Write-Host "   - Common location: C:\Program Files\Podman Desktop\resources\bin" -ForegroundColor Gray
-    Write-Host ""
-    Pause-BeforeExit 1
+    # Continue to search for it
+}
+
+if (-not $podmanFound) {
+    Write-Host "Podman CLI not found in PATH. Searching for installation..." -ForegroundColor Yellow
+    
+    # Common installation paths for Podman Desktop
+    $searchPaths = @(
+        "${env:ProgramFiles}\Podman Desktop\resources\bin",
+        "${env:LOCALAPPDATA}\Programs\Podman Desktop\resources\bin",
+        "${env:ProgramFiles(x86)}\Podman Desktop\resources\bin",
+        "${env:APPDATA}\Podman Desktop\resources\bin",
+        "${env:ProgramFiles}\RedHat\Podman\bin",
+        "${env:ProgramFiles(x86)}\RedHat\Podman\bin"
+    )
+    
+    $podmanExePath = $null
+    foreach ($path in $searchPaths) {
+        $testPath = Join-Path $path "podman.exe"
+        Write-Host "  Checking: $testPath" -ForegroundColor Gray
+        
+        if (Test-Path $testPath) {
+            Write-Host "  ✓ Found Podman at: $testPath" -ForegroundColor Green
+            $podmanExePath = $testPath
+            $podmanDir = $path
+            break
+        }
+    }
+    
+    if ($podmanExePath) {
+        # Add to PATH for this session
+        Write-Host "Adding Podman to PATH for this session..." -ForegroundColor Yellow
+        $env:PATH = "$podmanDir;$env:PATH"
+        
+        # Verify it works now
+        try {
+            $podmanVersion = & $podmanExePath --version 2>$null
+            if ($LASTEXITCODE -eq 0) {
+                Write-Host "✓ Podman CLI is now available: $podmanVersion" -ForegroundColor Green
+                $podmanFound = $true
+                
+                # Offer to add to system PATH permanently
+                Write-Host ""
+                Write-Host "Would you like to add Podman to your system PATH permanently? (Y/N)" -ForegroundColor Cyan
+                $response = Read-Host
+                if ($response -match '^[Yy]') {
+                    try {
+                        # Get current system PATH
+                        $currentPath = [System.Environment]::GetEnvironmentVariable("PATH", "Machine")
+                        if ($currentPath -notlike "*$podmanDir*") {
+                            $newPath = "$currentPath;$podmanDir"
+                            [System.Environment]::SetEnvironmentVariable("PATH", $newPath, "Machine")
+                            Write-Host "✓ Podman added to system PATH permanently!" -ForegroundColor Green
+                            Write-Host "  New PowerShell sessions will have podman available automatically." -ForegroundColor Gray
+                        } else {
+                            Write-Host "✓ Podman is already in system PATH." -ForegroundColor Green
+                        }
+                    } catch {
+                        Write-Host "⚠ Could not modify system PATH. You may need to add it manually:" -ForegroundColor Yellow
+                        Write-Host "  Path to add: $podmanDir" -ForegroundColor White
+                    }
+                }
+            }
+        } catch {
+            Write-Host "✗ Found Podman but it's not working properly." -ForegroundColor Red
+        }
+    }
+    
+    if (-not $podmanFound) {
+        Write-Host ""
+        Write-Host "✗ Could not locate Podman CLI installation." -ForegroundColor Red
+        Write-Host ""
+        Write-Host "Troubleshooting steps:" -ForegroundColor Yellow
+        Write-Host "1. Check if Podman Desktop is installed:" -ForegroundColor White
+        Write-Host "   - Look for 'Podman Desktop' in Start Menu" -ForegroundColor Gray
+        Write-Host "   - Check Programs and Features / Add or Remove Programs" -ForegroundColor Gray
+        Write-Host ""
+        Write-Host "2. Try reinstalling Podman Desktop:" -ForegroundColor White
+        Write-Host "   - Download from: https://podman-desktop.io/" -ForegroundColor Gray
+        Write-Host "   - Or run: .\3-install-podman.ps1" -ForegroundColor Gray
+        Write-Host ""
+        Write-Host "3. Manual installation check:" -ForegroundColor White
+        foreach ($path in $searchPaths) {
+            Write-Host "   - Check: $path" -ForegroundColor Gray
+        }
+        Write-Host ""
+        Pause-BeforeExit 1
+    }
 }
 Write-Host ""
 
