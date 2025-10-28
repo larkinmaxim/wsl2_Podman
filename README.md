@@ -4,11 +4,12 @@ A comprehensive set of PowerShell scripts to automate the installation and confi
 
 ## 📋 Overview
 
-This repository contains three PowerShell scripts that provide a complete containerization setup on Windows:
+This repository contains four PowerShell scripts that provide a complete containerization setup on Windows:
 
 1. **`install-wsl.ps1`** - Initial WSL installation and system configuration
 2. **`post-install-wsl.ps1`** - Post-reboot configuration and WSL2 setup
-3. **`install-podman.ps1`** - Podman Desktop and CLI installation with machine setup
+3. **`install-podman.ps1`** - Podman Desktop installation
+4. **`post-install-podman.ps1`** - Podman machine setup and verification
 
 ## 🔧 System Requirements
 
@@ -57,13 +58,22 @@ This repository contains three PowerShell scripts that provide a complete contai
 
 ### install-podman.ps1
 
-**Purpose**: Complete Podman containerization platform installation
+**Purpose**: Podman Desktop application installation
 
 **Features**:
 
 - ✅ WSL dependency validation
 - ✅ Automatic latest Podman Desktop download from GitHub
 - ✅ Silent installation with progress tracking
+- ✅ Installer cleanup and user guidance for next steps
+
+### post-install-podman.ps1
+
+**Purpose**: Podman machine setup and verification (run in fresh PowerShell session)
+
+**Features**:
+
+- ✅ Podman CLI availability verification
 - ✅ Podman machine initialization and startup
 - ✅ Container functionality verification with test run
 - ✅ Comprehensive installation validation
@@ -108,7 +118,7 @@ This repository contains three PowerShell scripts that provide a complete contai
 
 **Restart your computer when prompted**
 
-### Step 4: Complete Installation
+### Step 4: Complete WSL Setup
 
 1. **Open PowerShell as Administrator again** (see [Running PowerShell as Administrator](#-running-powershell-as-administrator) section)
 
@@ -120,10 +130,23 @@ This repository contains three PowerShell scripts that provide a complete contai
    ```powershell
    .\post-install-wsl.ps1
    ```
-3. **Run Podman installation script**
+
+### Step 5: Install Podman Desktop
+
+3. **Run Podman Desktop installation script**
 
    ```powershell
    .\install-podman.ps1
+   ```
+
+### Step 6: Complete Podman Setup
+
+4. **Close PowerShell and open a NEW PowerShell window as Administrator**
+5. **Navigate to scripts folder and run final setup**
+
+   ```powershell
+   cd C:\WSL-Scripts
+   .\post-install-podman.ps1
    ```
 
 **✅ Done! Your WSL2 and Podman environment is ready.**
@@ -193,15 +216,28 @@ Set-ExecutionPolicy -ExecutionPolicy Restricted -Scope CurrentUser
 - Smart WSL dependency checking before installation
 - Dynamic download from official GitHub releases API
 - Silent installation with comprehensive progress feedback
-- Automatic machine initialization and startup
-- Thorough verification including test container execution
-- Excellent error handling with troubleshooting guidance
 - Proper cleanup of temporary files
+- Clear guidance for next steps requiring fresh PowerShell session
 
 **⚠️ Considerations**:
 
 - Requires stable internet connection for downloads
 - Downloads and executes binary from internet (from official source)
+- Requires fresh PowerShell session for CLI access
+
+### post-install-podman.ps1 Analysis
+
+**✅ Strengths**:
+
+- Verifies Podman CLI availability in fresh session
+- Automatic machine initialization and startup
+- Thorough verification including test container execution
+- Excellent error handling with troubleshooting guidance
+- Clear success/failure reporting
+
+**⚠️ Considerations**:
+
+- Must be run in fresh PowerShell session after Podman Desktop installation
 - Podman machine startup can take several minutes on first run
 
 ## 🐛 Troubleshooting
