@@ -17,66 +17,6 @@ This repository contains four PowerShell scripts that provide a complete contain
 
 - **Windows 10 version 2004** (Build 19041) or **Windows 11**
 - **6 GB RAM minimum** (validated by script)
-- **Administrator privileges** (required for all scripts)
-- **CPU virtualization support** (Intel VT-x or AMD-V)
-- **Hyper-V compatible processor**
-- **Git** (for cloning repository - [Download here](https://git-scm.com/downloads))
-- **Stable internet connection** (for downloads and installation)
-
-### Supported Windows Versions
-
-- Windows 10 Home, Pro, Enterprise, Education (version 2004+)
-- Windows 11 (all editions)
-
-## 📦 What's Included
-
-### 1-install-wsl.ps1
-
-**Purpose**: Initial WSL installation and system preparation
-
-**Features**:
-
-- ✅ Existing WSL installation detection with user choice
-- ✅ System RAM validation (minimum 6GB check)
-- ✅ Windows Subsystem for Linux feature enablement
-- ✅ Virtual Machine Platform feature enablement
-- ✅ User-friendly progress indicators
-- ✅ Automatic restart handling
-- ✅ Comprehensive error checking
-
-### 2-post-install-wsl.ps1
-
-**Purpose**: Post-reboot configuration and WSL2 setup
-
-**Features**:
-
-- ✅ WSL installation verification
-- ✅ WSL2 default version configuration
-- ✅ Installed distributions detection
-- ✅ WSL kernel updates
-- ✅ Helpful next-step guidance
-
-### 3-install-podman.ps1
-
-**Purpose**: Podman Desktop application installation
-
-**Features**:
-
-- ✅ WSL dependency validation
-- ✅ Automatic latest Podman Desktop download from GitHub
-- ✅ Silent installation with progress tracking
-- ✅ Installer cleanup and user guidance for next steps
-
-### 4-post-install-podman.ps1
-
-**Purpose**: Podman machine setup and verification (run in fresh PowerShell session)
-
-**Features**:
-
-- ✅ Podman CLI availability verification
-- ✅ Podman machine initialization and startup
-- ✅ Container functionality verification with test run
-- ✅ Comprehensive installation validation
 
 ## 🚀 Quick Start Guide
 
@@ -163,6 +103,41 @@ This repository contains four PowerShell scripts that provide a complete contain
 4. **Click "Yes"** when prompted by UAC
 
 ![PowerShell Run as Administrator][powershell-admin-menu]
+
+### 💡 **PowerShell Pro Tips**
+
+#### **Navigate to Your Scripts Folder**
+Once PowerShell terminal opens, you need to change directory to where your installation scripts are located:
+```powershell
+cd C:\WSL-Scripts
+```
+
+#### **Tab Completion (Auto-Complete)**
+PowerShell has smart auto-completion! Type the first few characters of a filename and press **TAB** to auto-complete:
+- Type `1` + **TAB** → PowerShell completes to `1-install-wsl.ps1`
+- Type `3-i` + **TAB** → PowerShell completes to `3-install-podman.ps1`
+- Press **TAB** multiple times to cycle through matching files
+
+#### **Command History Navigation**
+PowerShell remembers your previous commands:
+- Press **↑ (Up Arrow)** to recall the last command
+- Keep pressing **↑** to browse through command history
+- Press **↓ (Down Arrow)** to go forward in history
+- Press **Enter** to execute the selected command
+
+#### **Quick Script Execution**
+```powershell
+# Navigate to folder
+cd C:\WSL-Scripts
+
+# Run scripts in order (use Tab completion!)
+.\1-install-wsl.ps1
+# (Restart computer, then continue)
+.\2-post-install-wsl.ps1
+.\3-install-podman.ps1
+# (Close PowerShell, open new one)
+.\4-post-install-podman.ps1
+```
 
 ## 📖 Detailed Usage Instructions
 
@@ -315,30 +290,32 @@ If you encounter errors like "WSL is not installed or not accessible" or Windows
 ### Most Likely Causes:
 
 1. **Wrong Script Order** (Most Common)
+
    - Running `2-post-install-wsl.ps1` without running `1-install-wsl.ps1` first
    - **Solution**: Always follow the correct order: `1-install-wsl.ps1` → Restart → `2-post-install-wsl.ps1` → `3-install-podman.ps1` → `4-post-install-podman.ps1`
-
 2. **Missing Restart**
+
    - Ran `1-install-wsl.ps1` but didn't restart the computer
    - **Solution**: Restart the computer and then run `2-post-install-wsl.ps1`
-
 3. **Administrator Privileges**
+
    - Scripts not running with Administrator privileges
    - **Solution**: Right-click PowerShell → "Run as Administrator"
 
 ### Diagnostic Steps:
 
 1. **Check if WSL features are enabled:**
+
    ```powershell
    Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
    Get-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform
    ```
-
 2. **If features show "Disabled":**
+
    - Run `.\1-install-wsl.ps1` as Administrator
    - Restart when prompted
-
 3. **If features show "Enabled" but WSL still doesn't work:**
+
    - Restart the computer
    - Then run `.\2-post-install-wsl.ps1`
 
