@@ -35,6 +35,7 @@ if (-not $podmanFound) {
     # Quick search in common locations
     $searchPaths = @(
         "${env:ProgramFiles}\RedHat\Podman",
+        "${env:ProgramFiles}\Podman",
         "${env:ProgramFiles}\Podman Desktop\resources\bin",
         "${env:LOCALAPPDATA}\Programs\Podman Desktop\resources\bin",
         "${env:ProgramFiles(x86)}\Podman Desktop\resources\bin",

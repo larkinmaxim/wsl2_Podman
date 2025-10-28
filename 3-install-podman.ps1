@@ -102,12 +102,73 @@ Remove-Item -Path $downloadPath -Force -ErrorAction SilentlyContinue
 Write-Host "Waiting for installation to complete..." -ForegroundColor Yellow
 Start-Sleep -Seconds 10
 
+# Step 2.5: Install Standalone Podman CLI
+Write-Host "Step 2.5: Installing Standalone Podman CLI..." -ForegroundColor Cyan
+
+# Download and install standalone Podman CLI
+$cliApiUrl = "https://api.github.com/repos/containers/podman/releases/latest"
+Write-Host "Fetching latest Podman CLI release information..." -ForegroundColor Yellow
+
+try {
+    $cliResponse = Invoke-RestMethod -Uri $cliApiUrl -ErrorAction Stop
+    $cliVersion = $cliResponse.tag_name.TrimStart('v')
+    Write-Host "Latest Podman CLI version: $cliVersion" -ForegroundColor Green
+
+    # Look for Windows installer
+    $windowsAsset = $cliResponse.assets | Where-Object { $_.name -like "*setup*.exe" -or $_.name -like "*windows*.zip" -or $_.name -like "*win*.zip" }
+    
+    if ($windowsAsset) {
+        $cliDownloadUrl = $windowsAsset[0].browser_download_url
+        $cliFileName = $windowsAsset[0].name
+        $cliDownloadPath = Join-Path $env:TEMP $cliFileName
+        
+        Write-Host "Downloading: $cliFileName" -ForegroundColor Yellow
+        Write-Host "From: $cliDownloadUrl" -ForegroundColor Gray
+        
+        Invoke-WebRequest -Uri $cliDownloadUrl -OutFile $cliDownloadPath
+        Write-Host "Downloaded to: $cliDownloadPath" -ForegroundColor Green
+        
+        # Install based on file type
+        if ($cliFileName -like "*.exe") {
+            Write-Host "Installing Podman CLI (EXE)..." -ForegroundColor Yellow
+            $cliInstall = Start-Process -FilePath $cliDownloadPath -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait -PassThru
+            if ($cliInstall.ExitCode -eq 0) {
+                Write-Host "+ Podman CLI installed successfully!" -ForegroundColor Green
+            } else {
+                Write-Host "! CLI installation may have issues. Exit code: $($cliInstall.ExitCode)" -ForegroundColor Yellow
+            }
+        } elseif ($cliFileName -like "*.zip") {
+            Write-Host "Extracting Podman CLI (ZIP)..." -ForegroundColor Yellow
+            $extractPath = "${env:ProgramFiles}\Podman"
+            if (!(Test-Path $extractPath)) {
+                New-Item -ItemType Directory -Path $extractPath -Force | Out-Null
+            }
+            Expand-Archive -Path $cliDownloadPath -DestinationPath $extractPath -Force
+            Write-Host "+ Podman CLI extracted to: $extractPath" -ForegroundColor Green
+        }
+        
+        # Clean up CLI installer
+        Remove-Item -Path $cliDownloadPath -Force -ErrorAction SilentlyContinue
+        
+    } else {
+        Write-Host "! No Windows installer found for Podman CLI" -ForegroundColor Yellow
+        Write-Host "  Will attempt to use CLI from Podman Desktop installation" -ForegroundColor Gray
+    }
+    
+} catch {
+    Write-Host "! Could not download standalone CLI: $($_.Exception.Message)" -ForegroundColor Yellow
+    Write-Host "  Will attempt to use CLI from Podman Desktop installation" -ForegroundColor Gray
+}
+
+Write-Host ""
+
 # Step 3: Configure Podman CLI PATH
 Write-Host "Step 3: Configuring Podman CLI PATH..." -ForegroundColor Cyan
 
 # Common installation paths for Podman CLI and Desktop
 $searchPaths = @(
     "${env:ProgramFiles}\RedHat\Podman",
+    "${env:ProgramFiles}\Podman",
     "${env:ProgramFiles}\Podman Desktop\resources\bin",
     "${env:LOCALAPPDATA}\Programs\Podman Desktop\resources\bin",
     "${env:ProgramFiles(x86)}\Podman Desktop\resources\bin",
