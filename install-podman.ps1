@@ -102,6 +102,47 @@ Remove-Item -Path $downloadPath -Force -ErrorAction SilentlyContinue
 Write-Host "Waiting for installation to complete..." -ForegroundColor Yellow
 Start-Sleep -Seconds 10
 
+# Refresh PATH environment variable
+Write-Host "Refreshing environment variables..." -ForegroundColor Yellow
+$env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("PATH", "User")
+
+# Verify podman is available
+try {
+    $podmanVersion = podman --version 2>$null
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "Podman CLI is available: $podmanVersion" -ForegroundColor Green
+    } else {
+        throw "Podman command not found"
+    }
+} catch {
+    Write-Host "WARNING: Podman CLI not immediately available. Trying alternative paths..." -ForegroundColor Yellow
+    
+    # Common installation paths
+    $commonPaths = @(
+        "${env:ProgramFiles}\Podman Desktop\resources\bin",
+        "${env:LOCALAPPDATA}\Programs\Podman Desktop\resources\bin",
+        "${env:ProgramFiles(x86)}\Podman Desktop\resources\bin"
+    )
+    
+    $podmanFound = $false
+    foreach ($path in $commonPaths) {
+        $podmanExe = Join-Path $path "podman.exe"
+        if (Test-Path $podmanExe) {
+            Write-Host "Found Podman at: $podmanExe" -ForegroundColor Green
+            $env:PATH = "$path;$env:PATH"
+            $podmanFound = $true
+            break
+        }
+    }
+    
+    if (-not $podmanFound) {
+        Write-Host "ERROR: Could not locate Podman CLI after installation" -ForegroundColor Red
+        Write-Host "Please try restarting PowerShell or add Podman to PATH manually" -ForegroundColor Yellow
+        Pause-BeforeExit 1
+    }
+}
+Write-Host ""
+
 # Step 3: Initialize Podman machine
 Write-Host "Step 3: Initializing Podman machine..." -ForegroundColor Cyan
 
@@ -196,8 +237,6 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "Quick start commands:" -ForegroundColor Cyan
     Write-Host "  podman ps                 # List running containers" -ForegroundColor White
     Write-Host "  podman images             # List images" -ForegroundColor White
-    Write-Host "  podman run -it ubuntu     # Run Ubuntu container" -ForegroundColor White
-    Write-Host "  podman machine stop       # Stop Podman machine" -ForegroundColor White
     Write-Host "  podman machine start      # Start Podman machine" -ForegroundColor White
     Write-Host ""
     Write-Host "Podman Desktop GUI is also installed." -ForegroundColor Cyan
