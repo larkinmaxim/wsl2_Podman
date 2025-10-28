@@ -111,7 +111,7 @@ Write-Host "Next Steps:" -ForegroundColor Cyan
 Write-Host "1. Close this PowerShell window" -ForegroundColor White
 Write-Host "2. Open a NEW PowerShell window as Administrator" -ForegroundColor White
 Write-Host "3. Navigate to this folder and run:" -ForegroundColor White
-Write-Host "   .\post-install-podman.ps1" -ForegroundColor Yellow
+Write-Host "   .\4-post-install-podman.ps1" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "This ensures Podman CLI is properly available in the new session." -ForegroundColor Gray
 Write-Host ""

@@ -6,10 +6,10 @@ A comprehensive set of PowerShell scripts to automate the installation and confi
 
 This repository contains four PowerShell scripts that provide a complete containerization setup on Windows:
 
-1. **`install-wsl.ps1`** - Initial WSL installation and system configuration
-2. **`post-install-wsl.ps1`** - Post-reboot configuration and WSL2 setup
-3. **`install-podman.ps1`** - Podman Desktop installation
-4. **`post-install-podman.ps1`** - Podman machine setup and verification
+1. **`1-install-wsl.ps1`** - Initial WSL installation and system configuration
+2. **`2-post-install-wsl.ps1`** - Post-reboot configuration and WSL2 setup
+3. **`3-install-podman.ps1`** - Podman Desktop installation
+4. **`4-post-install-podman.ps1`** - Podman machine setup and verification
 
 ## 🔧 System Requirements
 
@@ -30,7 +30,7 @@ This repository contains four PowerShell scripts that provide a complete contain
 
 ## 📦 What's Included
 
-### install-wsl.ps1
+### 1-install-wsl.ps1
 
 **Purpose**: Initial WSL installation and system preparation
 
@@ -44,7 +44,7 @@ This repository contains four PowerShell scripts that provide a complete contain
 - ✅ Automatic restart handling
 - ✅ Comprehensive error checking
 
-### post-install-wsl.ps1
+### 2-post-install-wsl.ps1
 
 **Purpose**: Post-reboot configuration and WSL2 setup
 
@@ -56,7 +56,7 @@ This repository contains four PowerShell scripts that provide a complete contain
 - ✅ WSL kernel updates
 - ✅ Helpful next-step guidance
 
-### install-podman.ps1
+### 3-install-podman.ps1
 
 **Purpose**: Podman Desktop application installation
 
@@ -67,7 +67,7 @@ This repository contains four PowerShell scripts that provide a complete contain
 - ✅ Silent installation with progress tracking
 - ✅ Installer cleanup and user guidance for next steps
 
-### post-install-podman.ps1
+### 4-post-install-podman.ps1
 
 **Purpose**: Podman machine setup and verification (run in fresh PowerShell session)
 
@@ -111,7 +111,7 @@ This repository contains four PowerShell scripts that provide a complete contain
 3. **Run WSL installation script**
 
    ```powershell
-   .\install-wsl.ps1
+   .\1-install-wsl.ps1
    ```
 
 ### Step 3: Restart Computer
@@ -128,7 +128,7 @@ This repository contains four PowerShell scripts that provide a complete contain
 2. **Run post-installation script**
 
    ```powershell
-   .\post-install-wsl.ps1
+   .\2-post-install-wsl.ps1
    ```
 
 ### Step 5: Install Podman Desktop
@@ -136,7 +136,7 @@ This repository contains four PowerShell scripts that provide a complete contain
 3. **Run Podman Desktop installation script**
 
    ```powershell
-   .\install-podman.ps1
+   .\3-install-podman.ps1
    ```
 
 ### Step 6: Complete Podman Setup
@@ -146,7 +146,7 @@ This repository contains four PowerShell scripts that provide a complete contain
 
    ```powershell
    cd C:\WSL-Scripts
-   .\post-install-podman.ps1
+   .\4-post-install-podman.ps1
    ```
 
 **✅ Done! Your WSL2 and Podman environment is ready.**
@@ -183,7 +183,7 @@ Set-ExecutionPolicy -ExecutionPolicy Restricted -Scope CurrentUser
 
 ## 🛠️ Script Analysis & Validation
 
-### install-wsl.ps1 Analysis
+### 1-install-wsl.ps1 Analysis
 
 **✅ Strengths**:
 
@@ -199,7 +199,7 @@ Set-ExecutionPolicy -ExecutionPolicy Restricted -Scope CurrentUser
 - RAM requirement (6GB) might be restrictive for some users
 - No CPU virtualization capability check
 
-### post-install-wsl.ps1 Analysis
+### 2-post-install-wsl.ps1 Analysis
 
 **✅ Strengths**:
 
@@ -209,7 +209,7 @@ Set-ExecutionPolicy -ExecutionPolicy Restricted -Scope CurrentUser
 - Robust error handling
 - Automatic WSL updates
 
-### install-podman.ps1 Analysis
+### 3-install-podman.ps1 Analysis
 
 **✅ Strengths**:
 
@@ -225,7 +225,7 @@ Set-ExecutionPolicy -ExecutionPolicy Restricted -Scope CurrentUser
 - Downloads and executes binary from internet (from official source)
 - Requires fresh PowerShell session for CLI access
 
-### post-install-podman.ps1 Analysis
+### 4-post-install-podman.ps1 Analysis
 
 **✅ Strengths**:
 
@@ -315,12 +315,12 @@ If you encounter errors like "WSL is not installed or not accessible" or Windows
 ### Most Likely Causes:
 
 1. **Wrong Script Order** (Most Common)
-   - Running `post-install-wsl.ps1` without running `install-wsl.ps1` first
-   - **Solution**: Always follow the correct order: `install-wsl.ps1` → Restart → `post-install-wsl.ps1` → `install-podman.ps1`
+   - Running `2-post-install-wsl.ps1` without running `1-install-wsl.ps1` first
+   - **Solution**: Always follow the correct order: `1-install-wsl.ps1` → Restart → `2-post-install-wsl.ps1` → `3-install-podman.ps1` → `4-post-install-podman.ps1`
 
 2. **Missing Restart**
-   - Ran `install-wsl.ps1` but didn't restart the computer
-   - **Solution**: Restart the computer and then run `post-install-wsl.ps1`
+   - Ran `1-install-wsl.ps1` but didn't restart the computer
+   - **Solution**: Restart the computer and then run `2-post-install-wsl.ps1`
 
 3. **Administrator Privileges**
    - Scripts not running with Administrator privileges
@@ -335,12 +335,12 @@ If you encounter errors like "WSL is not installed or not accessible" or Windows
    ```
 
 2. **If features show "Disabled":**
-   - Run `.\install-wsl.ps1` as Administrator
+   - Run `.\1-install-wsl.ps1` as Administrator
    - Restart when prompted
 
 3. **If features show "Enabled" but WSL still doesn't work:**
    - Restart the computer
-   - Then run `.\post-install-wsl.ps1`
+   - Then run `.\2-post-install-wsl.ps1`
 
 ---
 
