@@ -272,6 +272,40 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 - 💡 It's the right moment to request a new computer! 😄
 - (Or you could try closing some memory-intensive applications, but where's the fun in that?)
 
+## 🛠️ Quick Fix for Common WSL Errors
+
+If you encounter errors like "WSL is not installed or not accessible" or Windows prompts to install WSL when running scripts:
+
+### Most Likely Causes:
+
+1. **Wrong Script Order** (Most Common)
+   - Running `post-install-wsl.ps1` without running `install-wsl.ps1` first
+   - **Solution**: Always follow the correct order: `install-wsl.ps1` → Restart → `post-install-wsl.ps1` → `install-podman.ps1`
+
+2. **Missing Restart**
+   - Ran `install-wsl.ps1` but didn't restart the computer
+   - **Solution**: Restart the computer and then run `post-install-wsl.ps1`
+
+3. **Administrator Privileges**
+   - Scripts not running with Administrator privileges
+   - **Solution**: Right-click PowerShell → "Run as Administrator"
+
+### Diagnostic Steps:
+
+1. **Check if WSL features are enabled:**
+   ```powershell
+   Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+   Get-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform
+   ```
+
+2. **If features show "Disabled":**
+   - Run `.\install-wsl.ps1` as Administrator
+   - Restart when prompted
+
+3. **If features show "Enabled" but WSL still doesn't work:**
+   - Restart the computer
+   - Then run `.\post-install-wsl.ps1`
+
 ---
 
 **⚠️ Important Notes:**
