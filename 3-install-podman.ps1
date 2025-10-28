@@ -105,8 +105,9 @@ Start-Sleep -Seconds 10
 # Step 3: Configure Podman CLI PATH
 Write-Host "Step 3: Configuring Podman CLI PATH..." -ForegroundColor Cyan
 
-# Common installation paths for Podman Desktop
+# Common installation paths for Podman CLI and Desktop
 $searchPaths = @(
+    "${env:ProgramFiles}\RedHat\Podman",
     "${env:ProgramFiles}\Podman Desktop\resources\bin",
     "${env:LOCALAPPDATA}\Programs\Podman Desktop\resources\bin",
     "${env:ProgramFiles(x86)}\Podman Desktop\resources\bin",
