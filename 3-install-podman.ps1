@@ -125,8 +125,12 @@ try {
         Write-Host "Downloading: $cliFileName" -ForegroundColor Yellow
         Write-Host "From: $cliDownloadUrl" -ForegroundColor Gray
         
-        Invoke-WebRequest -Uri $cliDownloadUrl -OutFile $cliDownloadPath
-        Write-Host "Downloaded to: $cliDownloadPath" -ForegroundColor Green
+        # Download with suppressed progress (same UX as Desktop)
+        $ProgressPreference = 'SilentlyContinue'
+        Invoke-WebRequest -Uri $cliDownloadUrl -OutFile $cliDownloadPath -UseBasicParsing
+        $ProgressPreference = 'Continue'
+        
+        Write-Host "Download complete!" -ForegroundColor Green
         
         # Install based on file type
         if ($cliFileName -like "*.exe") {
