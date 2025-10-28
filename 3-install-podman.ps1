@@ -135,11 +135,36 @@ try {
         # Install based on file type
         if ($cliFileName -like "*.exe") {
             Write-Host "Installing Podman CLI (EXE)..." -ForegroundColor Yellow
-            $cliInstall = Start-Process -FilePath $cliDownloadPath -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait -PassThru
-            if ($cliInstall.ExitCode -eq 0) {
-                Write-Host "+ Podman CLI installed successfully!" -ForegroundColor Green
-            } else {
-                Write-Host "! CLI installation may have issues. Exit code: $($cliInstall.ExitCode)" -ForegroundColor Yellow
+            
+            try {
+                # Start the installer with a timeout to prevent hanging
+                $cliInstall = Start-Process -FilePath $cliDownloadPath -ArgumentList "/S" -PassThru
+                
+                # Wait for installation with timeout (max 2 minutes)
+                $timeout = 120 # seconds
+                $timer = 0
+                Write-Host "  Waiting for installation to complete..." -ForegroundColor Yellow
+                
+                while (!$cliInstall.HasExited -and $timer -lt $timeout) {
+                    Start-Sleep -Seconds 5
+                    $timer += 5
+                    if (($timer % 20) -eq 0) {
+                        Write-Host "  Still installing... ($timer/$timeout seconds)" -ForegroundColor Gray
+                    }
+                }
+                
+                if ($cliInstall.HasExited) {
+                    if ($cliInstall.ExitCode -eq 0) {
+                        Write-Host "+ Podman CLI installed successfully!" -ForegroundColor Green
+                    } else {
+                        Write-Host "! CLI installation completed with exit code: $($cliInstall.ExitCode)" -ForegroundColor Yellow
+                    }
+                } else {
+                    Write-Host "! Installation timeout reached - continuing (installer may still be running)" -ForegroundColor Yellow
+                    # Don't kill the process, just continue
+                }
+            } catch {
+                Write-Host "! Error during CLI installation: $($_.Exception.Message)" -ForegroundColor Yellow
             }
         } elseif ($cliFileName -like "*.zip") {
             Write-Host "Extracting Podman CLI (ZIP)..." -ForegroundColor Yellow
