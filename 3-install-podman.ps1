@@ -262,6 +262,53 @@ if ($podmanFound) {
 }
 
 Write-Host ""
+
+# Step 4: Configure Podman Desktop Startup Settings
+Write-Host "Step 4: Configuring Podman Desktop startup settings..." -ForegroundColor Cyan
+
+try {
+    # Find Podman Desktop executable
+    $podmanDesktopPaths = @(
+        "${env:LOCALAPPDATA}\Programs\Podman Desktop\Podman Desktop.exe",
+        "${env:ProgramFiles}\Podman Desktop\Podman Desktop.exe",
+        "${env:ProgramFiles(x86)}\Podman Desktop\Podman Desktop.exe"
+    )
+    
+    $podmanDesktopExe = $null
+    foreach ($path in $podmanDesktopPaths) {
+        if (Test-Path $path) {
+            $podmanDesktopExe = $path
+            break
+        }
+    }
+    
+    if ($podmanDesktopExe) {
+        Write-Host "Found Podman Desktop at: $podmanDesktopExe" -ForegroundColor Green
+        
+        # Configure to start minimized on login
+        $registryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+        $registryName = "Podman Desktop"
+        $registryValue = "`"$podmanDesktopExe`" --minimized"
+        
+        Write-Host "Configuring Podman Desktop to start minimized on login..." -ForegroundColor Yellow
+        
+        # Set the registry entry
+        Set-ItemProperty -Path $registryPath -Name $registryName -Value $registryValue -Force
+        
+        Write-Host "+ Podman Desktop configured to start minimized on login" -ForegroundColor Green
+        Write-Host "  Registry: $registryPath\$registryName" -ForegroundColor Gray
+        
+    } else {
+        Write-Host "! Could not locate Podman Desktop executable" -ForegroundColor Yellow
+        Write-Host "  Startup configuration will be handled by Windows during first launch" -ForegroundColor Gray
+    }
+    
+} catch {
+    Write-Host "! Could not configure startup settings: $($_.Exception.Message)" -ForegroundColor Yellow
+    Write-Host "  You can manually configure this in Podman Desktop settings" -ForegroundColor Gray
+}
+
+Write-Host ""
 Write-Host "========================================" -ForegroundColor Green
 Write-Host "   Podman Desktop Installation Complete!" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green
