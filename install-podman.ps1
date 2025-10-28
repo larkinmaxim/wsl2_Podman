@@ -102,47 +102,8 @@ Remove-Item -Path $downloadPath -Force -ErrorAction SilentlyContinue
 Write-Host "Waiting for installation to complete..." -ForegroundColor Yellow
 Start-Sleep -Seconds 10
 
-# Step 3: Verify Podman CLI installation (Option 3 - Simplified)
-Write-Host "Step 3: Verifying Podman CLI installation..." -ForegroundColor Cyan
-
-$podmanFound = $false
-for ($i = 1; $i -le 3; $i++) {
-    # Refresh PATH
-    $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + 
-                [System.Environment]::GetEnvironmentVariable("Path", "User")
-    
-    # Check if podman command exists
-    if (Get-Command podman -ErrorAction SilentlyContinue) {
-        $version = podman --version
-        Write-Host "Podman CLI found: $version" -ForegroundColor Green
-        $podmanFound = $true
-        break
-    }
-    
-    if ($i -lt 3) {
-        Write-Host "Podman not found yet, waiting... ($i/3)" -ForegroundColor Yellow
-        Start-Sleep -Seconds 5
-    }
-}
-
-if (-not $podmanFound) {
-    Write-Host "ERROR: Podman CLI not found after installation." -ForegroundColor Red
-    Write-Host ""
-    Write-Host "Please try the following:" -ForegroundColor Yellow
-    Write-Host "  1. Close and reopen PowerShell as Administrator" -ForegroundColor White
-    Write-Host "  2. Run: podman --version" -ForegroundColor White
-    Write-Host "  3. If still not found, check if Podman is in:" -ForegroundColor White
-    Write-Host "     C:\Program Files\RedHat\Podman" -ForegroundColor White
-    Write-Host ""
-    Write-Host "Then manually run the rest of the setup:" -ForegroundColor Yellow
-    Write-Host "  podman machine init" -ForegroundColor White
-    Write-Host "  podman machine start" -ForegroundColor White
-    Pause-BeforeExit 1
-}
-Write-Host ""
-
-# Step 4: Initialize Podman machine
-Write-Host "Step 4: Initializing Podman machine..." -ForegroundColor Cyan
+# Step 3: Initialize Podman machine
+Write-Host "Step 3: Initializing Podman machine..." -ForegroundColor Cyan
 
 try {
     # Check if machine already exists
@@ -173,8 +134,8 @@ try {
 }
 Write-Host ""
 
-# Step 5: Start Podman machine
-Write-Host "Step 5: Starting Podman machine..." -ForegroundColor Cyan
+# Step 4: Start Podman machine
+Write-Host "Step 4: Starting Podman machine..." -ForegroundColor Cyan
 
 try {
     # Check if machine is already running
@@ -203,8 +164,8 @@ try {
 }
 Write-Host ""
 
-# Step 6: Verify installation
-Write-Host "Step 6: Verifying Podman installation..." -ForegroundColor Cyan
+# Step 5: Verify installation
+Write-Host "Step 5: Verifying Podman installation..." -ForegroundColor Cyan
 Write-Host ""
 
 Write-Host "=== Podman Version ===" -ForegroundColor Yellow
